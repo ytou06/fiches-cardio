@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F7F8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151B" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cardiogen">
+<title>Fiches Cardiogen</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px)} body{margin:0} img{max-width:100%} [hidden]{display:none!important}
+/* Layout : application de lecture — barre du haut (52 px) collante, onglets de section collants dessous,
+   une seule colonne de lecture (≤ 680 px), navigation précédent/suivant en bas de chaque section,
+   barre d’onglets fixe en bas (Fiches · Recherche · Calculateurs). */
+:root{
+  --paper:#F6F7F8; --sheet:#FFFFFF; --ink:#16202A; --muted:#5A6774; --line:#E1E5E9; --soft:#EEF1F4;
+  --grid:rgba(200,40,70,.13); --trace:#16202A;
+  --accent:#B71C3A;
+  --f-cm:#B71C3A; --f-ry:#3446B0; --f-cc:#0D7470; --f-pe:#9A6210;
+  --f-cm-bg:#FBEDF0; --f-ry-bg:#EDEFFB; --f-cc-bg:#E6F4F3; --f-pe-bg:#FAF1E3;
+  --warn:#9A3B00; --warn-bg:#FFF3EA; --upd:#2F5D2F; --upd-bg:#EDF6EB;
+  --display:"Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs:16px; --bar:52px; --tabs:46px; --nav:62px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0F151B; --sheet:#161E26; --ink:#E7ECF0; --muted:#9CA9B5; --line:#26313C; --soft:#1C2630;
+  --grid:rgba(255,110,130,.11); --trace:#F1F4F6; --accent:#F0607A;
+  --f-cm:#F0607A; --f-ry:#8C9BFF; --f-cc:#3FC2BA; --f-pe:#E2A84A;
+  --f-cm-bg:#2A161C; --f-ry-bg:#191D36; --f-cc-bg:#10292A; --f-pe-bg:#2A2010;
+  --warn:#FFB07A; --warn-bg:#2A1C12; --upd:#9AD49A; --upd-bg:#14241A;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#0F151B; --sheet:#161E26; --ink:#E7ECF0; --muted:#9CA9B5; --line:#26313C; --soft:#1C2630;
+  --grid:rgba(255,110,130,.11); --trace:#F1F4F6; --accent:#F0607A;
+  --f-cm:#F0607A; --f-ry:#8C9BFF; --f-cc:#3FC2BA; --f-pe:#E2A84A;
+  --f-cm-bg:#2A161C; --f-ry-bg:#191D36; --f-cc-bg:#10292A; --f-pe-bg:#2A2010;
+  --warn:#FFB07A; --warn-bg:#2A1C12; --upd:#9AD49A; --upd-bg:#14241A;
+  color-scheme:dark;
+}
+html[data-size="1"]{--fs:17.5px} html[data-size="2"]{--fs:19px}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important; animation:none!important} }
+body{background:var(--paper); color:var(--ink); font-family:var(--body); font-size:var(--fs); line-height:1.6;
+  -webkit-text-size-adjust:100%; padding-inline:0; padding-block:0 calc(var(--nav) + env(safe-area-inset-bottom,0px) + 24px)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+button{font:inherit; color:inherit}
+.col{max-width:720px; margin-inline:auto; padding-inline:18px}
+.view[hidden]{display:none!important}
+
+/* ---------- barre du haut ---------- */
+.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:30; height:var(--bar);
+  background:color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter:saturate(1.4) blur(12px);
+  -webkit-backdrop-filter:saturate(1.4) blur(12px); border-bottom:1px solid var(--line)}
+.bar .col{height:100%; display:flex; align-items:center; gap:10px}
+.brand{font-family:var(--display); font-size:1.4rem; text-decoration:none; white-space:nowrap}
+.bar-title{flex:1; min-width:0; font-weight:600; font-size:.98rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.iconbtn{display:inline-flex; align-items:center; justify-content:center; gap:4px; min-width:40px; height:40px; padding:0 8px;
+  border:0; background:none; border-radius:10px; cursor:pointer; color:var(--accent); text-decoration:none; font-weight:500}
+.iconbtn:hover{background:var(--soft)}
+.iconbtn svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+.sizebtn{margin-left:auto; color:var(--muted); font-family:var(--display); font-size:1.25rem}
+
+/* ---------- barre d’onglets du bas ---------- */
+.tabbar{position:fixed; left:0; right:0; bottom:0; z-index:40; display:grid; grid-template-columns:repeat(3,1fr);
+  background:color-mix(in srgb, var(--sheet) 94%, transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--line); padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabbar a{display:flex; flex-direction:column; align-items:center; gap:2px; padding:6px 4px; text-decoration:none; color:var(--muted);
+  font-size:.72rem; font-weight:500; border-radius:10px}
+.tabbar a[aria-current="page"]{color:var(--accent)}
+.tabbar svg{width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+
+/* ---------- accueil ---------- */
+.home-head{padding-block:22px 6px}
+.home-head h1{font-family:var(--display); font-weight:400; font-size:2.3rem; line-height:1.05; margin:0; text-wrap:balance}
+.home-head p{margin:.5rem 0 0; color:var(--muted); font-size:.95rem}
+.hero-ecg{margin-block:14px 4px; overflow:hidden; border-radius:10px}
+.hero-ecg svg{display:block; width:100%; height:auto}
+.resume{display:flex; align-items:center; gap:12px; margin-block:14px 4px; padding:12px 14px; border-radius:14px; background:var(--sheet);
+  border:1px solid var(--line); text-decoration:none}
+.resume small{display:block; color:var(--muted); font-size:.8rem}
+.resume strong{display:block; font-weight:600}
+.resume .go{margin-left:auto; color:var(--accent)}
+.filters{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin-inline:-18px; padding:14px 18px 6px}
+.filters::-webkit-scrollbar{display:none}
+.filt{flex:0 0 auto; border:1px solid var(--line); background:var(--sheet); color:var(--ink); border-radius:999px; padding:.42rem .85rem;
+  font-size:.86rem; cursor:pointer; white-space:nowrap}
+.filt[aria-pressed="true"]{background:var(--ink); color:var(--sheet); border-color:var(--ink)}
+.group h2{font-family:var(--display); font-weight:400; font-size:1.45rem; margin:22px 0 6px; display:flex; align-items:center; gap:10px}
+.group h2::before{content:""; width:10px; height:10px; border-radius:50%; background:var(--gc)}
+.rows{list-style:none; margin:0; padding:0; background:var(--sheet); border:1px solid var(--line); border-radius:14px; overflow:hidden}
+.rows li + li{border-top:1px solid var(--line)}
+.row{display:grid; grid-template-columns:4px minmax(0,1fr) auto; gap:12px; align-items:center; padding:12px 14px 12px 0; text-decoration:none}
+.row::before{content:""; align-self:stretch; background:var(--gc); border-radius:0 3px 3px 0}
+.row strong{display:block; font-weight:600; line-height:1.3}
+.row span.sub{display:block; color:var(--muted); font-size:.84rem; line-height:1.4; margin-top:2px}
+.row .chev{color:var(--muted); font-size:1.2rem}
+.row:active{background:var(--soft)}
+.note{color:var(--muted); font-size:.82rem; margin-top:26px}
+
+/* ---------- fiche ---------- */
+.f-top{padding-block:18px 10px}
+.f-eye{font-size:.84rem; color:var(--fc); font-weight:500}
+.f-top h2{font-family:var(--display); font-weight:400; font-size:clamp(1.9rem, 7vw, 2.5rem); line-height:1.08; margin:.2rem 0 .3rem; text-wrap:balance}
+.f-src{font-size:.8rem; color:var(--muted); margin:0}
+.ptabs{position:sticky; top:calc(env(safe-area-inset-top,0px) + var(--bar)); z-index:20; background:color-mix(in srgb, var(--paper) 94%, transparent);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line)}
+.ptabs .col{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; height:var(--tabs); align-items:stretch}
+.ptabs .col::-webkit-scrollbar{display:none}
+.ptab{flex:0 0 auto; border:0; background:none; padding:0 12px; font-size:.92rem; color:var(--muted); cursor:pointer; position:relative; white-space:nowrap}
+.ptab[aria-selected="true"]{color:var(--ink); font-weight:600}
+.ptab[aria-selected="true"]::after{content:""; position:absolute; left:10px; right:10px; bottom:-1px; height:3px; border-radius:3px 3px 0 0; background:var(--fc)}
+.fiche[data-fam="cm"]{--fc:var(--f-cm); --fcb:var(--f-cm-bg)}
+.fiche[data-fam="ry"]{--fc:var(--f-ry); --fcb:var(--f-ry-bg)}
+.fiche[data-fam="cc"]{--fc:var(--f-cc); --fcb:var(--f-cc-bg)}
+.fiche[data-fam="pe"]{--fc:var(--f-pe); --fcb:var(--f-pe-bg)}
+.pane{display:grid; gap:26px; padding-block:22px 8px; animation:paneIn .18s ease-out}
+.pane[hidden]{display:none}
+@keyframes paneIn{from{opacity:.4; transform:translateY(4px)} to{opacity:1; transform:none}}
+.lede{margin:0; font-size:1.05em; line-height:1.6}
+.blk{min-width:0}
+.blk h3{font-family:var(--display); font-weight:400; font-size:1.5rem; line-height:1.15; margin:0 0 .5rem; text-wrap:balance}
+.blk h4{font-size:.92rem; font-weight:600; margin:1rem 0 .3rem; color:var(--fc)}
+.blk p{margin:0 0 .6rem}
+.blk ul, .blk ol{margin:0 0 .6rem; padding-left:1.2rem; display:grid; gap:.45rem}
+.blk li::marker{color:var(--fc)}
+.num{font-family:var(--mono); font-size:.9em; white-space:nowrap; background:var(--fcb); padding:0 .3em; border-radius:4px}
+b,strong{font-weight:600}
+.s30{background:var(--fcb); border-radius:14px; padding:16px 18px}
+.s30 h3{margin:0 0 .5rem; font-family:var(--display); font-weight:400; font-size:1.35rem; color:var(--fc)}
+.s30 ul{margin:0; padding-left:1.15rem; display:grid; gap:.55rem}
+.box{border-radius:14px; padding:16px 18px}
+.box h3{font-family:var(--display); font-weight:400; font-size:1.3rem; margin:0 0 .5rem}
+.box.warn{background:var(--warn-bg)} .box.warn h3{color:var(--warn)}
+.box.upd{background:var(--upd-bg)} .box.upd h3{color:var(--upd)}
+.box ul{margin:0; padding-left:1.15rem; display:grid; gap:.45rem}
+.tbl{overflow-x:auto; margin-block:.4rem; border:1px solid var(--line); border-radius:12px; background:var(--sheet)}
+table{border-collapse:collapse; width:100%; font-size:.88rem; min-width:440px}
+th,td{text-align:left; padding:.55rem .7rem; border-bottom:1px solid var(--line); vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-weight:600; font-size:.8rem; color:var(--muted); background:var(--soft)}
+td.n,th.n{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+figure{margin:0}
+.fig{display:grid; gap:10px}
+.fig figcaption, .blk figcaption{font-size:.85rem; color:var(--muted)}
+.ecgs{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:10px}
+.ecg{display:block; width:100%; height:auto}
+.ecg-bg{fill:var(--sheet)} .ecg-grid line{stroke:var(--grid); stroke-width:1}
+.ecg-line{fill:none; stroke:var(--trace); stroke-width:1.7; stroke-linejoin:round; stroke-linecap:round}
+.ecg-lab{font:500 11px var(--body); fill:var(--muted)}
+.ecg-wrap{border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.ladder{display:grid; gap:6px}
+.rung{display:grid; grid-template-columns:minmax(84px, 120px) minmax(0,1fr); gap:12px; padding:12px; border-radius:10px; background:var(--sheet); border:1px solid var(--line)}
+.rung .k{font-size:.84rem; font-weight:600; color:var(--fc); line-height:1.35}
+.flow{display:grid; gap:8px}
+.flow .st{background:var(--sheet); border:1px solid var(--line); border-left:4px solid var(--fc); border-radius:10px; padding:10px 12px; font-size:.95rem}
+.flow .st b{display:block; color:var(--fc)}
+.risk{display:grid; grid-template-columns:4fr 2fr 4fr; border-radius:10px; overflow:hidden; font-size:.85rem}
+.risk div{padding:10px} .risk .lo{background:var(--upd-bg)} .risk .mid{background:var(--warn-bg)} .risk .hi{background:var(--f-cm-bg)}
+.risk b{font-family:var(--mono); display:block}
+.svgfig{width:100%; height:auto} .svgfig text{font:500 12px var(--body); fill:var(--ink)} .svgfig .sub{font-size:10.5px; fill:var(--muted)}
+details{border:1px solid var(--line); border-radius:12px; background:var(--sheet)}
+details + details{margin-top:8px}
+summary{cursor:pointer; list-style:none; padding:14px 44px 14px 16px; font-weight:600; position:relative; line-height:1.4}
+summary::-webkit-details-marker{display:none}
+summary::after{content:""; position:absolute; right:18px; top:20px; width:9px; height:9px; border-right:2px solid var(--fc); border-bottom:2px solid var(--fc); transform:rotate(45deg); transition:transform .15s}
+details[open] summary::after{transform:rotate(-135deg); top:24px}
+details > div{padding:0 16px 14px}
+details > div p{margin:0 0 .5rem} details > div ul{margin:0 0 .5rem; padding-left:1.1rem}
+.links ul{list-style:none; padding:0; margin:0; display:grid; gap:8px}
+.links a{display:flex; justify-content:space-between; gap:12px; align-items:center; padding:12px 14px; border-radius:12px; background:var(--sheet);
+  border:1px solid var(--line); text-decoration:none; font-size:.95rem}
+.links a::after{content:"↗"; color:var(--fc)}
+.src{font-size:.82rem; color:var(--muted); margin:0}
+.pager{display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-block:18px 6px}
+.pager a{display:flex; flex-direction:column; gap:2px; padding:12px 14px; border-radius:12px; background:var(--sheet); border:1px solid var(--line);
+  text-decoration:none; min-height:62px; justify-content:center}
+.pager a small{color:var(--muted); font-size:.78rem}
+.pager a strong{font-weight:600; color:var(--fc)}
+.pager .next{text-align:right; grid-column:2}
+.pager .prev{grid-column:1}
+
+/* ---------- recherche ---------- */
+.s-head{padding-block:18px 8px}
+.s-field{display:flex; align-items:center; gap:8px; background:var(--sheet); border:1px solid var(--line); border-radius:14px; padding:0 12px}
+.s-field svg{width:20px; height:20px; fill:none; stroke:var(--muted); stroke-width:2; stroke-linecap:round}
+.s-field input{flex:1; min-width:0; border:0; background:none; color:var(--ink); font:inherit; padding:13px 0; outline:none}
+.s-sugg{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.s-count{color:var(--muted); font-size:.85rem; margin:12px 0 8px}
+.hits{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.hitcard{background:var(--sheet); border:1px solid var(--line); border-left:4px solid var(--fc); border-radius:12px; padding:12px 14px 6px}
+.hit-t{display:block; font-weight:600; line-height:1.3; margin-bottom:4px}
+.hit{display:block; padding:8px 0; text-decoration:none; border-top:1px solid var(--line)}
+.hit small{color:var(--fc); font-size:.8rem; font-weight:600}
+.hit-more{display:block; font-size:.8rem; color:var(--muted); padding:4px 0 8px}
+.hit p{margin:4px 0 0; font-size:.88rem; color:var(--muted); line-height:1.45}
+.hit mark{background:var(--warn-bg); color:var(--ink); border-radius:3px; padding:0 2px}
+
+/* ---------- calculateurs ---------- */
+.calc{border:1px solid var(--line); border-radius:14px; background:var(--sheet); padding:16px; display:grid; gap:12px}
+.c-head{font-family:var(--display); font-size:1.3rem; line-height:1.2; color:var(--fc, var(--accent))}
+.c-form{display:grid; gap:12px; margin:0}
+.c-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:12px}
+.c-f{display:grid; gap:4px; font-size:.86rem; color:var(--muted); min-width:0}
+.c-in{display:flex; align-items:center; border:1px solid var(--line); border-radius:10px; background:var(--paper); overflow:hidden}
+.c-in input{flex:1; min-width:0; border:0; background:transparent; color:var(--ink); font:500 1.1rem var(--mono); padding:.6rem .7rem}
+.c-in em{font-size:.8rem; color:var(--muted); padding-right:.7rem; font-style:normal; white-space:nowrap}
+.c-f select{font:inherit; font-size:.95rem; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:.55rem}
+.c-r{border:0; margin:0; padding:0; display:grid; gap:6px}
+.c-r legend{font-size:.86rem; color:var(--muted); margin-bottom:6px; padding:0}
+.c-r label, .c-c{display:flex; gap:.7rem; align-items:flex-start; padding:.65rem .75rem; border-radius:10px; background:var(--paper); border:1px solid var(--line); font-size:.94rem; cursor:pointer}
+.c-r label:has(input:checked), .c-c:has(input:checked){border-color:var(--fc, var(--accent)); background:var(--fcb, var(--f-cm-bg))}
+.c-r label span, .c-c span{flex:1}
+.c-r b, .c-c b{font:500 .85rem var(--mono); color:var(--muted)}
+.c-r input, .c-c input{margin-top:.25rem; accent-color:var(--accent); width:1.1rem; height:1.1rem; flex:0 0 auto}
+.c-list{display:grid; gap:6px}
+.c-res{position:sticky; bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 8px); z-index:5}
+.c-out{border-radius:12px; padding:12px 14px; background:var(--soft); display:grid; gap:2px; box-shadow:0 8px 22px -12px rgba(0,0,0,.45)}
+.c-out strong{font:500 1.5rem/1.2 var(--mono)} .c-out strong small{font:400 .8rem var(--body); color:var(--muted)}
+.c-out span{font-size:.92rem}
+.c-out.lo{background:var(--upd-bg)} .c-out.lo strong{color:var(--upd)}
+.c-out.mid{background:var(--warn-bg)} .c-out.mid strong{color:var(--warn)}
+.c-out.hi{background:var(--f-cm-bg)} .c-out.hi strong{color:var(--f-cm)}
+.c-n{font-size:.84rem; color:var(--muted); margin:.4rem 0 0; background:var(--sheet)} .c-n.warn{color:var(--warn)}
+.c-t{min-width:0; width:auto; font-size:.9rem; margin-top:.4rem; background:var(--sheet)}
+.c-t td{padding:.25rem .8rem .25rem 0; border-bottom:1px solid var(--line)} .c-t td:last-child{font-family:var(--mono)}
+.calc-back{display:inline-block; margin-top:14px; font-size:.9rem; color:var(--accent); text-decoration:none}
+
+
+.lock{position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px; background:var(--paper)}
+.lock-card{width:100%; max-width:360px; display:grid; gap:12px; text-align:center}
+.lock-card img{justify-self:center; border-radius:18px}
+.lock-card h1{font-family:var(--display); font-weight:400; font-size:2rem; margin:0}
+.lock-card p{margin:0; color:var(--muted); font-size:.95rem}
+.lock-l{text-align:left; font-size:.86rem; color:var(--muted); margin-top:8px}
+.lock-card input[type=password]{font:inherit; font-size:1.05rem; padding:.8rem .9rem; border:1px solid var(--line); border-radius:12px; background:var(--sheet); color:var(--ink)}
+.lock-card button{font:inherit; font-weight:600; padding:.85rem; border:0; border-radius:12px; background:var(--accent); color:#fff; cursor:pointer}
+.lock-card button[disabled]{opacity:.6}
+.lock-err{color:var(--f-cm)!important}
+body.locked .bar, body.locked .tabbar{display:none}
+
+</style>
+</head>
+<body class="locked">
+
+<header class="bar"><div class="col">
+<a class="iconbtn back" id="back" href="#accueil" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>
+<a class="brand" id="brand" href="#accueil">Fiches Cardiogen</a>
+<span class="bar-title" id="bar-title"></span>
+<button class="iconbtn sizebtn" id="size" type="button" aria-label="Taille du texte">Aa</button>
+</div></header>
+
+<main id="app"></main>
+
+<nav class="tabbar" aria-label="Navigation principale">
+<a href="#accueil" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z"/><path d="M15 4v4h4"/><path d="M8 13h2l1.2-2.5L13 16l1.3-3H16"/></svg><span>Fiches</span></a>
+<a href="#recherche" data-tab="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span>Recherche</span></a>
+<a href="#calculateurs" data-tab="calcs"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8"/><path d="M8 11h.01M12 11h.01M16 11h.01M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 18h.01M12 18h4"/></svg><span>Calculateurs</span></a>
+</nav>
+
+
+<section class="lock" id="lockscreen" hidden>
+<form class="lock-card" id="unlock" autocomplete="on">
+<img src="icons/icon-192.png" alt="" width="72" height="72">
+<h1>Fiches Cardiogen</h1>
+<p>Entrez le mot de passe pour ouvrir les fiches. Il ne sera plus demandé sur ce téléphone.</p>
+<input type="text" name="username" autocomplete="username" value="fiches-cardiogen" hidden>
+<label for="pw" class="lock-l">Mot de passe</label>
+<input id="pw" name="password" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+<button type="submit" id="unlock-btn">Ouvrir les fiches</button>
+<p class="lock-err" id="lock-err" role="alert" hidden></p>
+</form>
+</section>
+
+<script>
+var PANE_LABELS = {"essentiel": "Essentiel", "comprendre": "Comprendre", "diagnostic": "Diagnostic", "pec": "Prise en charge", "suivi": "Suivi", "calculer": "Calculer", "questions": "Questions", "liens": "Liens"};
+var CALC_T = {"qtc": "QT corrigé", "schwartz": "Score de Schwartz", "fmt": "Fréquence cible sous bêtabloquant", "shanghai": "Score de Shanghai", "hcmrisk": "HCM Risk-SCD", "taskforce": "Critères Task Force 2010", "amylose": "Stades des amyloses", "rvp": "Volumes du ventricule droit indexés", "carpreg": "Score CARPREG II", "peri": "Doses selon le poids"};
+/* Calculateurs cliniques intégrés aux fiches. Chaque calculateur se rend dans un
+   élément <div class="calc" data-calc="id">, recalcule à chaque saisie, et ne
+   conserve rien : tout reste sur le téléphone. */
+(function () {
+  var uid = 0;
+  function n(v) { var x = parseFloat(String(v).replace(',', '.')); return isNaN(x) ? null : x; }
+  function fmt(x, d) { return x.toLocaleString('fr-FR', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+  function num(p, id, label, unit, attrs) {
+    return '<label class="c-f" for="' + p + id + '"><span>' + label + '</span><span class="c-in"><input id="' + p + id +
+      '" data-k="' + id + '" type="number" inputmode="decimal" step="any" ' + (attrs || '') + '>' +
+      (unit ? '<em>' + unit + '</em>' : '') + '</span></label>';
+  }
+  function chk(p, id, label, pts) {
+    return '<label class="c-c" for="' + p + id + '"><input id="' + p + id + '" data-k="' + id + '" type="checkbox"><span>' + label +
+      '</span>' + (pts !== undefined ? '<b>' + String(pts).replace('.', ',') + '</b>' : '') + '</label>';
+  }
+  function radio(p, id, legend, opts) {
+    return '<fieldset class="c-r"><legend>' + legend + '</legend>' + opts.map(function (o, i) {
+      return '<label for="' + p + id + i + '"><input id="' + p + id + i + '" type="radio" name="' + p + id + '" data-k="' + id + '" value="' + o[0] + '"' +
+        (i === 0 ? ' checked' : '') + '><span>' + o[1] + '</span>' + (o[2] !== undefined ? '<b>' + String(o[2]).replace('.', ',') + '</b>' : '') + '</label>';
+    }).join('') + '</fieldset>';
+  }
+  function sel(p, id, legend, opts) {
+    return '<label class="c-f" for="' + p + id + '"><span>' + legend + '</span><select id="' + p + id + '" data-k="' + id + '">' +
+      opts.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('') + '</select></label>';
+  }
+  function vals(root) {
+    var v = {};
+    root.querySelectorAll('[data-k]').forEach(function (el) {
+      var k = el.dataset.k;
+      if (el.type === 'checkbox') v[k] = el.checked;
+      else if (el.type === 'radio') { if (el.checked) v[k] = el.value; }
+      else v[k] = el.value;
+    });
+    return v;
+  }
+  function out(level, big, text) {
+    return '<div class="c-out ' + (level || '') + '"><strong>' + big + '</strong><span>' + text + '</span></div>';
+  }
+
+  var C = {};
+
+  C.qtc = {
+    title: 'QT corrigé',
+    form: function (p) {
+      return '<div class="c-grid">' + num(p, 'qt', 'QT mesuré', 'ms', 'min="200" max="800"') +
+        num(p, 'fc', 'Fréquence cardiaque', 'par min', 'min="20" max="250"') + '</div>' +
+        radio(p, 'sexe', 'Sexe', [['h', 'Homme'], ['f', 'Femme']]);
+    },
+    calc: function (v) {
+      var qt = n(v.qt), fc = n(v.fc);
+      if (!qt || !fc) return out('', '—', 'Saisissez le QT (en D2 ou V5, méthode de la tangente) et la fréquence cardiaque.');
+      var rr = 60 / fc;
+      var baz = qt / Math.sqrt(rr), fri = qt / Math.cbrt(rr), fra = qt + 154 * (1 - rr), hod = qt + 1.75 * (fc - 60);
+      var lim = v.sexe === 'f' ? 460 : 450, lvl, msg;
+      if (baz >= 500) { lvl = 'hi'; msg = 'QT corrigé ≥ 500 ms : diagnostique de QT long si répété et sans cause acquise ; haut risque de torsade.'; }
+      else if (baz >= 480) { lvl = 'hi'; msg = 'QT corrigé ≥ 480 ms : diagnostique selon les recommandations européennes 2022 si répété, sans cause acquise.'; }
+      else if (baz >= lim) { lvl = 'mid'; msg = 'QT corrigé limite : refaire l’électrocardiogramme, test debout, épreuve d’effort (4e minute de récupération).'; }
+      else { lvl = 'lo'; msg = 'QT corrigé dans les limites habituelles (seuil ' + lim + ' ms). Un QT normal n’élimine pas un porteur de variant.'; }
+      var t = '<table class="c-t"><tr><td>Bazett</td><td>' + fmt(baz) + ' ms</td></tr><tr><td>Fridericia</td><td>' + fmt(fri) +
+        ' ms</td></tr><tr><td>Framingham</td><td>' + fmt(fra) + ' ms</td></tr><tr><td>Hodges</td><td>' + fmt(hod) + ' ms</td></tr></table>';
+      var note = (fc < 50 || fc > 100) ? '<p class="c-n">Fréquence extrême : Bazett se trompe (sous-correction en bradycardie, surcorrection en tachycardie). Préférer Fridericia.</p>' : '';
+      return out(lvl, fmt(baz) + ' ms <small>(Bazett)</small>', msg) + t + note;
+    }
+  };
+
+  C.fmt = {
+    title: 'Cible de fréquence sous bêtabloquant',
+    form: function (p) { return '<div class="c-grid">' + num(p, 'age', 'Âge', 'ans', 'min="1" max="100"') + num(p, 'fcmax', 'Fréquence maximale atteinte à l’effort', 'par min', 'min="40" max="250"') + '</div>'; },
+    calc: function (v) {
+      var a = n(v.age);
+      if (!a) return out('', '—', 'Saisissez l’âge pour obtenir la fréquence maximale théorique et la cible de 70 %.');
+      var fmt0 = 220 - a, cible = Math.round(fmt0 * 0.7), fm = n(v.fcmax);
+      var txt = 'Fréquence maximale théorique ' + fmt0 + ' par min. Sous bêtabloquant bien dosé, la fréquence maximale à l’effort doit rester sous ' + cible + ' par min (70 %).';
+      if (fm) {
+        var pct = Math.round(fm / fmt0 * 100);
+        return out(pct < 70 ? 'lo' : 'mid', pct + ' % <small>de la théorique</small>', (pct < 70 ? 'Bêtablocage efficace à l’effort. ' : 'Bêtablocage insuffisant : augmenter la dose si tolérée. ') + txt);
+      }
+      return out('', cible + ' <small>par min</small>', txt);
+    }
+  };
+
+  C.schwartz = {
+    title: 'Score de Schwartz (probabilité de QT long)',
+    form: function (p) {
+      return radio(p, 'qtc', 'QT corrigé (Bazett), au repos', [['0', 'Moins de 450 ms (ou 450–459 chez la femme)', 0], ['1', '450–459 ms chez l’homme', 1], ['2', '460–479 ms', 2], ['3', '≥ 480 ms', 3]]) +
+        '<div class="c-list">' + chk(p, 'recup', 'QT corrigé ≥ 480 ms à la 4e minute de récupération d’effort', 1) +
+        chk(p, 'tdp', 'Torsade de pointes documentée', 2) + chk(p, 'alt', 'Alternance de l’onde T', 1) +
+        chk(p, 'notch', 'Onde T crochetée dans 3 dérivations', 1) + chk(p, 'brady', 'Fréquence cardiaque basse pour l’âge', 0.5) + '</div>' +
+        radio(p, 'syn', 'Syncope', [['0', 'Aucune', 0], ['2', 'Au stress (effort, émotion)', 2], ['1', 'Sans stress', 1]]) +
+        '<div class="c-list">' + chk(p, 'surd', 'Surdité congénitale', 0.5) + chk(p, 'fam', 'Apparenté avec QT long certain', 1) +
+        chk(p, 'msj', 'Mort subite inexpliquée avant 30 ans chez un apparenté proche', 0.5) + '</div>';
+    },
+    calc: function (v) {
+      var s = (+v.qtc || 0) + (v.recup ? 1 : 0) + (v.tdp ? 2 : 0) + (v.alt ? 1 : 0) + (v.notch ? 1 : 0) + (v.brady ? 0.5 : 0) +
+        (v.tdp ? 0 : (+v.syn || 0)) + (v.surd ? 0.5 : 0) + (v.fam ? 1 : 0) + (v.msj ? 0.5 : 0);
+      var lvl = s >= 3.5 ? 'hi' : s >= 1.5 ? 'mid' : 'lo';
+      var txt = s >= 3.5 ? 'Probabilité élevée de QT long (score > 3 = diagnostic selon les recommandations européennes 2022, en l’absence de cause acquise).'
+        : s >= 1.5 ? 'Probabilité intermédiaire : répéter les électrocardiogrammes, test debout, épreuve d’effort, Holter ; avis en centre de compétence.'
+          : 'Probabilité faible.';
+      var n2 = v.tdp && +v.syn ? '<p class="c-n">Torsade et syncope ne se cumulent pas : seule la torsade est comptée.</p>' : '';
+      var n3 = v.fam && v.msj ? '<p class="c-n">Un même apparenté ne doit pas être compté deux fois.</p>' : '';
+      return out(lvl, fmt(s, s % 1 ? 1 : 0) + ' <small>points</small>', txt) + n2 + n3;
+    }
+  };
+
+  C.hcmrisk = {
+    title: 'HCM Risk-SCD (risque de mort subite à 5 ans)',
+    form: function (p) {
+      return '<div class="c-grid">' + num(p, 'age', 'Âge', 'ans', 'min="16" max="100"') +
+        num(p, 'mwt', 'Épaisseur pariétale maximale', 'mm', 'min="10" max="40"') +
+        num(p, 'la', 'Diamètre de l’oreillette gauche (parasternal)', 'mm', 'min="20" max="80"') +
+        num(p, 'grad', 'Gradient maximal de chambre de chasse (repos ou Valsalva)', 'mmHg', 'min="0" max="200"') + '</div>' +
+        '<div class="c-list">' + chk(p, 'fh', 'Antécédent familial de mort subite') + chk(p, 'nsvt', 'Tachycardie ventriculaire non soutenue') +
+        chk(p, 'syn', 'Syncope inexpliquée') + '</div>';
+    },
+    calc: function (v) {
+      var age = n(v.age), mwt = n(v.mwt), la = n(v.la), g = n(v.grad);
+      if (age === null || mwt === null || la === null || g === null) return out('', '—', 'Renseignez l’âge, l’épaisseur maximale, l’oreillette gauche et le gradient.');
+      var pi = 0.15939858 * mwt - 0.00294271 * mwt * mwt + 0.0259082 * la + 0.00446131 * g +
+        0.4583082 * (v.fh ? 1 : 0) + 0.82639195 * (v.nsvt ? 1 : 0) + 0.71650361 * (v.syn ? 1 : 0) - 0.01799934 * age;
+      var r = (1 - Math.pow(0.998, Math.exp(pi))) * 100;
+      var lvl = r >= 6 ? 'hi' : r >= 4 ? 'mid' : 'lo';
+      var txt = r >= 6 ? 'Risque élevé : défibrillateur automatique implantable à considérer (classe IIa).'
+        : r >= 4 ? 'Risque intermédiaire : défibrillateur à discuter (classe IIb), en tenant compte des facteurs additionnels.'
+          : 'Risque faible : défibrillateur non indiqué en règle, sauf facteurs additionnels importants.';
+      var warn = [];
+      if (age < 16) warn.push('score non validé avant 16 ans (utiliser HCM Risk-Kids)');
+      if (mwt > 35) warn.push('épaisseur > 35 mm hors du domaine de validation');
+      var extra = '<p class="c-n">À intégrer en plus (recommandations européennes 2023) : rehaussement tardif ≥ 15 % de la masse, fraction d’éjection &lt; 50 %, anévrysme apical, variant sarcomérique. Les patients après myectomie ou alcoolisation, ou avec phénocopie, sont hors champ.</p>';
+      return out(lvl, fmt(r, 1) + ' % <small>à 5 ans</small>', txt) + (warn.length ? '<p class="c-n warn">Attention : ' + warn.join(' ; ') + '.</p>' : '') + extra;
+    }
+  };
+
+  C.taskforce = {
+    title: 'Critères Task Force 2010 (cardiomyopathie ventriculaire droite arythmogène)',
+    form: function (p) {
+      var o = [['0', 'Aucun'], ['1', 'Mineur'], ['2', 'Majeur']];
+      return '<p class="c-n">Un seul critère par catégorie (le plus élevé). Voir le tableau de la fiche pour les définitions.</p><div class="c-grid">' +
+        sel(p, 'str', 'Structure (échographie, imagerie par résonance magnétique, angiographie)', o) +
+        sel(p, 'his', 'Histologie (biopsie)', o) + sel(p, 'rep', 'Repolarisation', o) + sel(p, 'dep', 'Dépolarisation', o) +
+        sel(p, 'ary', 'Arythmies', o) + sel(p, 'fam', 'Famille et génétique', o) + '</div>';
+    },
+    calc: function (v) {
+      var maj = 0, min = 0;
+      ['str', 'his', 'rep', 'dep', 'ary', 'fam'].forEach(function (k) { if (v[k] === '2') maj++; else if (v[k] === '1') min++; });
+      var r;
+      if (maj >= 2 || (maj >= 1 && min >= 2) || min >= 4) r = ['hi', 'Diagnostic certain'];
+      else if ((maj === 1 && min === 1) || min === 3) r = ['mid', 'Diagnostic limite (« borderline »)'];
+      else if (maj === 1 || min === 2) r = ['mid', 'Diagnostic possible'];
+      else r = ['lo', 'Critères non remplis'];
+      return out(r[0], r[1], maj + ' majeur' + (maj > 1 ? 's' : '') + ', ' + min + ' mineur' + (min > 1 ? 's' : '') +
+        '. Certain : 2 majeurs, ou 1 majeur + 2 mineurs, ou 4 mineurs. Limite : 1 majeur + 1 mineur, ou 3 mineurs. Possible : 1 majeur ou 2 mineurs.');
+    }
+  };
+
+  C.shanghai = {
+    title: 'Score de Shanghai (syndrome de Brugada)',
+    form: function (p) {
+      return radio(p, 'ecg', 'Électrocardiogramme (au moins un critère requis)', [['0', 'Aucun aspect de type 1', 0], ['3.5', 'Type 1 spontané (position standard ou haute)', 3.5], ['3', 'Type 1 induit par la fièvre', 3], ['2', 'Type 2 ou 3 converti en type 1 par test pharmacologique', 2]]) +
+        radio(p, 'cli', 'Histoire clinique', [['0', 'Aucun', 0], ['3', 'Arrêt cardiaque inexpliqué ou fibrillation ventriculaire / tachycardie polymorphe documentée', 3], ['2', 'Respiration agonique nocturne', 2], ['2b', 'Syncope suspecte d’être arythmique', 2], ['1', 'Syncope de mécanisme incertain', 1], ['0.5', 'Flutter ou fibrillation atriale avant 30 ans sans autre cause', 0.5]]) +
+        radio(p, 'fam', 'Histoire familiale', [['0', 'Aucun', 0], ['2', 'Brugada certain chez un apparenté du 1er ou 2e degré', 2], ['1', 'Mort subite suspecte (fièvre, nuit, médicament à risque) chez un apparenté du 1er ou 2e degré', 1], ['0.5', 'Mort subite inexpliquée avant 45 ans, autopsie négative, apparenté du 1er ou 2e degré', 0.5]]) +
+        '<div class="c-list">' + chk(p, 'gen', 'Variant probablement pathogène dans un gène de susceptibilité', 0.5) + '</div>';
+    },
+    calc: function (v) {
+      var e = parseFloat(v.ecg) || 0, c = parseFloat(v.cli) || 0, f = parseFloat(v.fam) || 0, g = v.gen ? 0.5 : 0;
+      if (!e) return out('lo', '—', 'Le score exige au moins un critère électrocardiographique de type 1.');
+      var s = e + c + f + g;
+      var r = s >= 3.5 ? ['hi', 'Brugada probable ou certain'] : s >= 2 ? ['mid', 'Brugada possible'] : ['lo', 'Non diagnostique'];
+      return out(r[0], fmt(s, s % 1 ? 1 : 0) + ' <small>points</small>', r[1] + '. Seuils : ≥ 3,5 probable ou certain ; 2–3 possible ; &lt; 2 non diagnostique.');
+    }
+  };
+
+  C.amylose = {
+    title: 'Stades pronostiques des amyloses',
+    form: function (p) {
+      return radio(p, 'type', 'Type d’amylose', [['al', 'AL (chaînes légères)'], ['attr', 'ATTR (transthyrétine)']]) +
+        '<div class="c-grid">' + num(p, 'bnp', 'NT-proBNP', 'ng/L') + num(p, 'tnt', 'Troponine T', 'ng/L') +
+        num(p, 'dflc', 'Différence entre chaînes légères impliquée et non impliquée', 'mg/L') + num(p, 'dfg', 'Débit de filtration glomérulaire', 'mL/min/1,73 m²') + '</div>';
+    },
+    calc: function (v) {
+      var bnp = n(v.bnp);
+      if (v.type === 'attr') {
+        var dfg = n(v.dfg);
+        if (bnp === null || dfg === null) return out('', '—', 'Amylose ATTR : renseignez NT-proBNP et débit de filtration glomérulaire.');
+        var hi = (bnp > 3000 ? 1 : 0) + (dfg < 45 ? 1 : 0);
+        var st = ['I', 'II', 'III'][hi], surv = ['≈ 69 mois', '≈ 47 mois', '≈ 24 mois'][hi];
+        return out(['lo', 'mid', 'hi'][hi], 'Stade ' + st, 'Stade du National Amyloidosis Centre (Gillmore 2018). Survie médiane historique ' + surv + ', avant les traitements actuels.');
+      }
+      var tnt = n(v.tnt), dflc = n(v.dflc);
+      if (bnp === null || tnt === null || dflc === null) return out('', '—', 'Amylose AL : renseignez NT-proBNP, troponine T et différence entre chaînes légères.');
+      var pts = (bnp >= 1800 ? 1 : 0) + (tnt >= 25 ? 1 : 0) + (dflc >= 180 ? 1 : 0);
+      var st2 = ['I', 'II', 'III', 'IV'][pts];
+      var b = bnp > 8500 ? '<p class="c-n warn">NT-proBNP &gt; 8 500 ng/L : forme très avancée (stade IIIb de la classification européenne), pronostic de quelques mois.</p>' : '';
+      return out(['lo', 'mid', 'hi', 'hi'][pts], 'Stade ' + st2, 'Classification révisée de la Mayo Clinic 2012 (seuils : NT-proBNP ≥ 1 800 ng/L, troponine T ≥ 25 ng/L, différence de chaînes légères ≥ 180 mg/L). Seuils établis avec la troponine T conventionnelle.') + b;
+    }
+  };
+
+  C.rvp = {
+    title: 'Volumes du ventricule droit indexés',
+    form: function (p) {
+      return '<div class="c-grid">' + num(p, 'h', 'Taille', 'cm') + num(p, 'w', 'Poids', 'kg') +
+        num(p, 'vtd', 'Volume télédiastolique du ventricule droit', 'mL') + num(p, 'vts', 'Volume télésystolique du ventricule droit', 'mL') + '</div>';
+    },
+    calc: function (v) {
+      var h = n(v.h), w = n(v.w);
+      if (!h || !w) return out('', '—', 'Renseignez taille et poids pour calculer la surface corporelle (formule de Mosteller).');
+      var sc = Math.sqrt(h * w / 3600), vtd = n(v.vtd), vts = n(v.vts), parts = [], lvl = 'lo';
+      if (vtd) { var a = vtd / sc; parts.push('télédiastolique ' + fmt(a) + ' mL/m² (seuil 160)'); if (a >= 160) lvl = 'hi'; }
+      if (vts) { var b = vts / sc; parts.push('télésystolique ' + fmt(b) + ' mL/m² (seuil 80)'); if (b >= 80) lvl = 'hi'; }
+      if (!parts.length) return out('', fmt(sc, 2) + ' <small>m²</small>', 'Surface corporelle. Ajoutez les volumes mesurés en imagerie par résonance magnétique.');
+      return out(lvl, fmt(sc, 2) + ' <small>m²</small>', 'Volumes indexés : ' + parts.join(' ; ') + '. ' +
+        (lvl === 'hi' ? 'Seuil atteint : remplacement valvulaire pulmonaire à discuter si fuite pulmonaire sévère.' : 'Seuils non atteints.'));
+    }
+  };
+
+  C.carpreg = {
+    title: 'Score CARPREG II (risque cardiaque maternel)',
+    form: function (p) {
+      return '<div class="c-list">' + chk(p, 'a', 'Événement cardiaque ou arythmie avant la grossesse', 3) +
+        chk(p, 'b', 'Dyspnée de classe III–IV ou cyanose au début de la grossesse', 3) + chk(p, 'c', 'Valve mécanique', 3) +
+        chk(p, 'd', 'Dysfonction ventriculaire', 2) + chk(p, 'e', 'Valvulopathie gauche à haut risque ou obstacle à l’éjection ventriculaire gauche', 2) +
+        chk(p, 'f', 'Hypertension pulmonaire', 2) + chk(p, 'g', 'Maladie coronaire', 2) + chk(p, 'h', 'Aortopathie à haut risque', 2) +
+        chk(p, 'i', 'Aucune intervention cardiaque antérieure', 1) + chk(p, 'j', 'Première évaluation après 20 semaines de grossesse', 1) + '</div>';
+    },
+    calc: function (v) {
+      var w = { a: 3, b: 3, c: 3, d: 2, e: 2, f: 2, g: 2, h: 2, i: 1, j: 1 }, s = 0;
+      Object.keys(w).forEach(function (k) { if (v[k]) s += w[k]; });
+      var risk = s <= 1 ? 5 : s === 2 ? 10 : s === 3 ? 15 : s === 4 ? 22 : 41;
+      return out(s <= 1 ? 'lo' : s <= 3 ? 'mid' : 'hi', s + ' <small>points</small>', 'Risque d’événement cardiaque maternel pendant la grossesse ≈ ' + risk + ' % (Silversides 2018).');
+    }
+  };
+
+  C.peri = {
+    title: 'Doses selon le poids (péricardite récidivante)',
+    form: function (p) { return '<div class="c-grid">' + num(p, 'w', 'Poids', 'kg', 'min="3" max="250"') + num(p, 'dfg', 'Débit de filtration glomérulaire (facultatif)', 'mL/min') + '</div>'; },
+    calc: function (v) {
+      var w = n(v.w);
+      if (!w) return out('', '—', 'Saisissez le poids.');
+      var col = w > 70 ? '0,5 mg 2 fois par jour' : '0,5 mg 1 fois par jour';
+      var ana = Math.min(100, Math.round(w * 2));
+      var dfg = n(v.dfg), r = '';
+      if (dfg !== null && dfg < 30) r = '<p class="c-n warn">Débit de filtration &lt; 30 : colchicine à réduire fortement ou à éviter, avis spécialisé.</p>';
+      else if (dfg !== null && dfg < 60) r = '<p class="c-n warn">Débit de filtration entre 30 et 60 : réduire la colchicine et surveiller la tolérance.</p>';
+      return out('', 'Colchicine ' + col, 'Anakinra : ' + ana + ' mg par jour en sous-cutané (2 mg/kg, maximum 100 mg).') + r;
+    }
+  };
+
+  function mount(el) {
+    var c = C[el.dataset.calc];
+    if (!c || el.dataset.ready) return;
+    el.dataset.ready = '1';
+    var p = 'c' + (++uid) + '-';
+    el.innerHTML = '<div class="c-head">' + c.title + '</div><form class="c-form" autocomplete="off">' + c.form(p) +
+      '</form><div class="c-res" aria-live="polite"></div>';
+    var form = el.querySelector('form'), res = el.querySelector('.c-res');
+    function go() { res.innerHTML = c.calc(vals(form)); }
+    form.addEventListener('input', go);
+    form.addEventListener('change', go);
+    form.addEventListener('submit', function (e) { e.preventDefault(); });
+    go();
+  }
+  window.CALCS = C;
+  window.mountCalcs = function (root) { (root || document).querySelectorAll('.calc[data-calc]').forEach(mount); };
+})();
+
+
+window.initApp = function(){
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var store = {
+    get: function(k, d){ try { var v = localStorage.getItem('fc:' + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+    set: function(k, v){ try { localStorage.setItem('fc:' + k, JSON.stringify(v)); } catch(e){} }
+  };
+  var views = {home: $('#v-home'), fiche: $('#v-fiche'), search: $('#v-search'), calcs: $('#v-calcs'), calc1: $('#v-calc1')};
+  var fiches = $$('.fiche');
+  var LAB = PANE_LABELS;
+  var norm = function(s){ return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); };
+  var current = {view: 'home', fiche: null, pane: null};
+  var listView = 'home';
+
+  // taille du texte
+  var size = store.get('size', 0);
+  document.documentElement.setAttribute('data-size', size);
+  $('#size').addEventListener('click', function(){ size = (size + 1) % 3; document.documentElement.setAttribute('data-size', size); store.set('size', size); });
+
+  function setBar(mode, title){
+    var back = $('#back'), brand = $('#brand'), bt = $('#bar-title');
+    back.hidden = (mode === 'top'); brand.hidden = (mode !== 'top');
+    bt.textContent = title || ''; bt.hidden = (mode === 'top');
+  }
+  function showView(name){
+    Object.keys(views).forEach(function(k){ views[k].hidden = (k !== name); });
+    var tab = (name === 'fiche' || name === 'home') ? 'home' : (name === 'calc1' ? 'calcs' : name);
+    $$('.tabbar a').forEach(function(a){ if (a.dataset.tab === tab) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    current.view = name;
+  }
+
+  // ---------- fiche ----------
+  function openPane(f, pane, opts){
+    var panes = $$('.pane', f);
+    if (!panes.some(function(p){ return p.dataset.pane === pane; })) pane = panes[0].dataset.pane;
+    panes.forEach(function(p){ p.hidden = (p.dataset.pane !== pane); });
+    $$('.ptab', f).forEach(function(t){
+      var on = t.dataset.pane === pane; t.setAttribute('aria-selected', String(on));
+      if (on) { var strip = t.parentNode; strip.scrollTo({left: t.offsetLeft - strip.clientWidth/2 + t.clientWidth/2, behavior: 'smooth'}); }
+    });
+    var p = panes.filter(function(x){ return !x.hidden; })[0];
+    if (window.mountCalcs) window.mountCalcs(p);
+    current.fiche = f.id; current.pane = pane;
+    store.set('last', {f: f.id, p: pane, t: $('h2', f).textContent});
+    if (opts && opts.term) $$('details', p).forEach(function(d){ if (norm(d.textContent).indexOf(opts.term) !== -1) d.open = true; });
+    if (!opts || !opts.keepScroll) {
+      var tabs = $('.ptabs', f), top = $('.f-top', f).offsetHeight;
+      if (opts && opts.fromTop) window.scrollTo(0, 0);
+      else if (window.scrollY > top) window.scrollTo(0, top);
+    }
+    var h = '#' + f.id + '--' + pane;
+    if (location.hash !== h) history.replaceState(null, '', h);
+  }
+  function openFiche(id, pane, opts){
+    var f = document.getElementById(id);
+    fiches.forEach(function(x){ x.hidden = (x !== f); });
+    showView('fiche');
+    setBar('back', $('h2', f).textContent);
+    openPane(f, pane || 'essentiel', Object.assign({fromTop: true}, opts || {}));
+  }
+  fiches.forEach(function(f){
+    $$('.ptab', f).forEach(function(t){ t.addEventListener('click', function(){ openPane(f, t.dataset.pane); }); });
+    $$('.pager a[data-go]', f).forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); openPane(f, a.dataset.go); }); });
+    // balayage gauche/droite entre sections
+    var sx = 0, sy = 0, ok = false;
+    var zone = $('.panes', f);
+    zone.addEventListener('touchstart', function(e){
+      var t = e.target; ok = !(t.closest('.tbl, .ecg-wrap, input, select, .calc, .ecgs'));
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+    }, {passive: true});
+    zone.addEventListener('touchend', function(e){
+      if (!ok) return;
+      var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) < 70 || Math.abs(dy) > 45) return;
+      var tabs = $$('.ptab', f).map(function(t){ return t.dataset.pane; });
+      var i = tabs.indexOf(current.pane) + (dx < 0 ? 1 : -1);
+      if (i >= 0 && i < tabs.length) openPane(f, tabs[i]);
+    }, {passive: true});
+  });
+
+  // ---------- accueil ----------
+  var fam = '';
+  $$('#v-home .filt').forEach(function(b){
+    b.addEventListener('click', function(){
+      fam = b.dataset.fam;
+      $$('#v-home .filt').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+      $$('#v-home .group').forEach(function(g){ g.hidden = !!fam && g.dataset.fam !== fam; });
+    });
+  });
+  function refreshResume(){
+    var last = store.get('last', null), r = $('#resume');
+    if (last && document.getElementById(last.f)) {
+      r.hidden = false; r.href = '#' + last.f + '--' + last.p;
+      $('#resume-t').textContent = last.t + ' · ' + (LAB[last.p] || '');
+    } else r.hidden = true;
+  }
+
+  // ---------- recherche ----------
+  var BLOCK = /^(P|LI|TD|TH|SUMMARY|H2|H3|H4|DIV|FIGCAPTION|LEGEND|LABEL|SPAN)$/;
+  function txt(el){
+    var out = [];
+    (function walk(n){
+      for (var c = n.firstChild; c; c = c.nextSibling) {
+        if (c.nodeType === 3) out.push(c.nodeValue);
+        else if (c.nodeType === 1 && c.tagName !== 'SVG' && c.tagName !== 'svg' && c.tagName !== 'NAV') {
+          var blk = BLOCK.test(c.tagName) && !(c.tagName === 'SPAN' && !c.classList.contains('k'));
+          if (blk) out.push(' '); walk(c); if (blk) out.push(' ');
+        }
+      }
+    })(el);
+    return out.join('').replace(/\s+/g, ' ').trim();
+  }
+  var idx = [];
+  fiches.forEach(function(f){
+    $$('.pane', f).forEach(function(p){
+      var raw = txt(p);
+      idx.push({f: f.id, fam: f.dataset.fam, t: $('h2', f).textContent, p: p.dataset.pane, raw: raw, n: norm(raw)});
+    });
+  });
+  var q = $('#q'), hits = $('#hits'), sc = $('#s-count'), sugg = $('#sugg');
+  function esc(s){ return s.replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function search(){
+    var t = norm(q.value.trim());
+    sugg.hidden = !!t; hits.innerHTML = '';
+    if (t.length < 2) { sc.hidden = true; return; }
+    var by = {}, list = [];
+    idx.forEach(function(e){
+      var i = e.n.indexOf(t);
+      if (i === -1) return;
+      var c = 0, j = i; while (j !== -1) { c++; j = e.n.indexOf(t, j + 1); }
+      var a = Math.max(0, e.raw.lastIndexOf(' ', Math.max(0, i - 45))), b = Math.min(e.raw.length, i + t.length + 75);
+      var snip = (a > 0 ? '…' : '') + esc(e.raw.slice(a, i)) + '<mark>' + esc(e.raw.slice(i, i + t.length)) + '</mark>' + esc(e.raw.slice(i + t.length, b)) + (b < e.raw.length ? '…' : '');
+      if (!by[e.f]) { by[e.f] = {f: e.f, fam: e.fam, t: e.t, total: 0, s: []}; list.push(by[e.f]); }
+      by[e.f].total += c; by[e.f].s.push({p: e.p, c: c, snip: snip});
+    });
+    list.sort(function(x, y){ return y.total - x.total; });
+    sc.hidden = false;
+    sc.textContent = list.length ? list.length + ' fiche' + (list.length > 1 ? 's' : '') : 'Aucun résultat. Essayez un mot plus court ou un synonyme.';
+    hits.innerHTML = list.map(function(r){
+      r.s.sort(function(x, y){ return y.c - x.c; });
+      return '<li class="hitcard" style="--fc:var(--f-' + r.fam + ')"><strong class="hit-t">' + esc(r.t) + '</strong>' + r.s.slice(0, 3).map(function(s){
+        return '<a class="hit" href="#' + r.f + '--' + s.p + '" data-term="' + esc(t) + '"><small>' + LAB[s.p] + '</small><p>' + s.snip + '</p></a>';
+      }).join('') + (r.s.length > 3 ? '<span class="hit-more">et ' + (r.s.length - 3) + ' autre' + (r.s.length > 4 ? 's' : '') + ' section' + (r.s.length > 4 ? 's' : '') + '</span>' : '') + '</li>';
+    }).join('');
+  }
+  var lastTerm = '';
+  q.addEventListener('input', search);
+  hits.addEventListener('click', function(e){ var a = e.target.closest('a'); if (a) lastTerm = a.dataset.term; });
+  $$('#sugg .filt').forEach(function(b){ b.addEventListener('click', function(){ q.value = b.dataset.q; search(); q.focus(); }); });
+
+  // ---------- routage ----------
+  $('#back').addEventListener('click', function(e){
+    e.preventDefault();
+    if (current.view === 'calc1') location.hash = '#calculateurs';
+    else location.hash = listView === 'search' ? '#recherche' : (listView === 'calcs' ? '#calculateurs' : '#accueil');
+  });
+  function route(){
+    var h = decodeURIComponent(location.hash.slice(1));
+    var parts = h.split('--');
+    var f = parts[0] && document.getElementById(parts[0]);
+    if (f && f.classList.contains('fiche')) {
+      var term = lastTerm; lastTerm = '';
+      if (current.view === 'fiche' && current.fiche === f.id) openPane(f, parts[1] || 'essentiel', {term: term});
+      else openFiche(f.id, parts[1], {term: term});
+      return;
+    }
+    if (h.indexOf('calc-') === 0) {
+      var id = h.slice(5), found = false;
+      $$('.calc1').forEach(function(s){ var on = s.dataset.c === id; s.hidden = !on; if (on) { found = true; if (window.mountCalcs) window.mountCalcs(s); } });
+      if (found) { showView('calc1'); setBar('back', CALC_T[id]); window.scrollTo(0, 0); return; }
+    }
+    if (h === 'recherche') { listView = 'search'; showView('search'); setBar('top'); window.scrollTo(0, 0); setTimeout(function(){ if (!q.value) q.focus(); }, 50); return; }
+    if (h === 'calculateurs') { listView = 'calcs'; showView('calcs'); setBar('top'); window.scrollTo(0, 0); return; }
+    listView = 'home'; showView('home'); setBar('top'); refreshResume(); window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+};
+
+
+(function(){
+  var b64d = function(t){ var s = atob(t), a = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; };
+  var b64e = function(buf){ var a = new Uint8Array(buf), t = ''; for (var i = 0; i < a.length; i++) t += String.fromCharCode(a[i]); return btoa(t); };
+  var KEYNAME = 'fc:key', DATA = null;
+  function lsGet(){ try { return JSON.parse(localStorage.getItem(KEYNAME)); } catch(e){ return null; } }
+  function lsSet(v){ try { localStorage.setItem(KEYNAME, JSON.stringify(v)); } catch(e){} }
+  function derive(pw, kdf){
+    return crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']).then(function(base){
+      return crypto.subtle.deriveKey({name: 'PBKDF2', salt: b64d(kdf.salt), iterations: kdf.iter, hash: 'SHA-256'}, base, {name: 'AES-GCM', length: 256}, true, ['decrypt']);
+    });
+  }
+  function decrypt(key){
+    return crypto.subtle.decrypt({name: 'AES-GCM', iv: b64d(DATA.iv)}, key, b64d(DATA.ct)).then(function(buf){ return new TextDecoder().decode(buf); });
+  }
+  function mount(html){
+    document.getElementById('app').innerHTML = html;
+    document.body.classList.remove('locked');
+    document.getElementById('lockscreen').hidden = true;
+    var lock = document.getElementById('lock');
+    if (lock) { lock.hidden = false; lock.addEventListener('click', function(){ try { localStorage.removeItem(KEYNAME); } catch(e){} location.replace(location.pathname); }); }
+    window.initApp();
+  }
+  function showLock(msg){
+    document.body.classList.add('locked');
+    document.getElementById('lockscreen').hidden = false;
+    var err = document.getElementById('lock-err');
+    err.hidden = !msg; err.textContent = msg || '';
+  }
+  var form = document.getElementById('unlock'), btn = document.getElementById('unlock-btn');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var pw = document.getElementById('pw').value.trim();
+    if (!pw || !DATA) return;
+    btn.disabled = true; btn.textContent = 'Ouverture…';
+    derive(pw, DATA.kdf).then(function(key){
+      return decrypt(key).then(function(html){
+        return crypto.subtle.exportKey('raw', key).then(function(raw){ lsSet({salt: DATA.kdf.salt, k: b64e(raw)}); mount(html); });
+      });
+    }).catch(function(){
+      btn.disabled = false; btn.textContent = 'Ouvrir les fiches';
+      showLock('Mot de passe incorrect. Vérifiez les tirets et les minuscules.');
+    });
+  });
+  document.body.classList.add('locked');
+  fetch('data/content.json', {cache: 'no-cache'}).then(function(r){ return r.json(); }).then(function(d){
+    DATA = d;
+    var st = lsGet();
+    if (!st || st.salt !== d.kdf.salt) return showLock();
+    return crypto.subtle.importKey('raw', b64d(st.k), {name: 'AES-GCM'}, true, ['decrypt']).then(decrypt).then(mount).catch(function(){ showLock(); });
+  }).catch(function(){ showLock('Impossible de charger les fiches. Vérifiez la connexion et rouvrez l’appli.'); });
+})();
+
+</script>
+
+<script>if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js'); }); }</script>
+</body>
+</html>
